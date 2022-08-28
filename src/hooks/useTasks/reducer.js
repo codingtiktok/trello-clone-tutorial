@@ -5,8 +5,8 @@ const taskReducer = (state, { type, payload }) => {
 		case "ADD_TASK":
 			return {
 				...state,
-				[payload.statusType]: [
-					...state[payload.statusType],
+				todo: [
+					...state.todo,
 					{
 						id: uuid(),
 						title: payload.newTask,
