@@ -13,6 +13,29 @@ const taskReducer = (state, { type, payload }) => {
 					},
 				],
 			};
+		case "UPDATE_TASK":
+			if (payload.destination === null) {
+				return state;
+			} else {
+				const statusFrom = payload.source.droppableId;
+				const indexFrom = payload.source.index;
+				const statusTo = payload.destination.droppableId;
+				const indexTo = payload.destination.index;
+
+				const task = state[statusFrom][indexFrom];
+
+				const from = Array.from(state[statusFrom]);
+				from.splice(indexFrom, 1);
+
+				const to = statusFrom === statusTo ? Array.from(from) : Array.from(state[statusTo]);
+				to.splice(indexTo, 0, task);
+
+				return {
+					...state,
+					[statusFrom]: from,
+					[statusTo]: to,
+				};
+			}
 		default:
 			throw new Error(`Unknown action type ${type}`);
 	}

@@ -36,7 +36,11 @@ export const TaskProvider = ({ children }) => {
 		dispatch({ type: "ADD_TASK", payload: { newTask, statusType } });
 	};
 
-	return <TaskContext.Provider value={{ state, addTask }}>{children}</TaskContext.Provider>;
+	const updateTask = (destination, source) => {
+		dispatch({ type: "UPDATE_TASK", payload: { source, destination } });
+	};
+
+	return <TaskContext.Provider value={{ state, addTask, updateTask }}>{children}</TaskContext.Provider>;
 };
 
 const useTasks = () => React.useContext(TaskContext);

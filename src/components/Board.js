@@ -1,5 +1,6 @@
 import useTasks from "../hooks/useTasks";
 import Card from "./Card";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 
 const status = {
 	todo: {
@@ -29,9 +30,26 @@ const Board = ({ statusType }) => {
 				<h1>{status[statusType].text}</h1>
 				<div className={`${status[statusType].color} w-3 h-3 rounded-full`}></div>
 			</div>
-			{tasks.map((task) => {
-				return <Card key={task.id} title={task.title} status={statusType} />;
-			})}
+			<Droppable droppableId={statusType}>
+				{(provided) => (
+					<div {...provided.droppableProps} ref={provided.innerRef} className="min-h-[1rem]">
+						{tasks.map((task, index) => {
+							return (
+								<Draggable key={task.id} draggableId={task.id} index={index}>
+									{(provided) => {
+										return (
+											<div {...provided.draggableProps} ref={provided.innerRef} className="mb-2">
+												<Card title={task.title} status={statusType} {...provided.dragHandleProps} />
+											</div>
+										);
+									}}
+								</Draggable>
+							);
+						})}
+						{provided.placeholder}
+					</div>
+				)}
+			</Droppable>
 		</div>
 	);
 };

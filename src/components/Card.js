@@ -6,11 +6,11 @@ const colors = {
 	completed: "bg-done-secondary",
 };
 
-const Card = ({ title, status }) => {
+const Card = ({ title, status, ...dragHandleProps }) => {
 	return (
 		<div className={`${colors[status]} rounded-md px-2 py-3 flex justify-between items-center gap-2 mb-2`}>
 			<p className="break-all">{title}</p>
-			<div>
+			<div {...dragHandleProps}>
 				<DraggableIcon />
 			</div>
 		</div>
