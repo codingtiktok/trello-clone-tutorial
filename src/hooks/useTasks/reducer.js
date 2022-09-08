@@ -36,6 +36,14 @@ const taskReducer = (state, { type, payload }) => {
 					[statusTo]: to,
 				};
 			}
+		case "DELETE_TASK":
+			const statusFrom = payload.droppableId;
+			const indexFrom = payload.index;
+
+			const from = Array.from(state[statusFrom]);
+			from.splice(indexFrom, 1);
+
+			return { ...state, [statusFrom]: from };
 		default:
 			throw new Error(`Unknown action type ${type}`);
 	}

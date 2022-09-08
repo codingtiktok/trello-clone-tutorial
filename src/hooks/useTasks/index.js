@@ -30,7 +30,13 @@ const initialTasks = {
 const TaskContext = React.createContext({});
 
 export const TaskProvider = ({ children }) => {
-	const [state, dispatch] = React.useReducer(taskReducer, initialTasks);
+	const [state, dispatch] = React.useReducer(taskReducer, initialTasks, () =>
+		JSON.parse(localStorage.getItem("tasks") || initialTasks)
+	);
+
+	React.useEffect(() => {
+		localStorage.setItem("tasks", JSON.stringify(state));
+	}, [state]);
 
 	const addTask = (newTask, statusType) => {
 		dispatch({ type: "ADD_TASK", payload: { newTask, statusType } });
@@ -40,7 +46,11 @@ export const TaskProvider = ({ children }) => {
 		dispatch({ type: "UPDATE_TASK", payload: { source, destination } });
 	};
 
-	return <TaskContext.Provider value={{ state, addTask, updateTask }}>{children}</TaskContext.Provider>;
+	const deleteTask = (source) => {
+		dispatch({ type: "DELETE_TASK", payload: source });
+	};
+
+	return <TaskContext.Provider value={{ state, addTask, updateTask, deleteTask }}>{children}</TaskContext.Provider>;
 };
 
 const useTasks = () => React.useContext(TaskContext);
